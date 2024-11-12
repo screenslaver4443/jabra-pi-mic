@@ -1,0 +1,10 @@
+[Unit]
+Description=USB Disconnect Handler
+
+[Service]
+Type=oneshot
+ExecStart=/scripts/usb_disconnect.sh
+
+[Install]
+WantedBy=multi-user.target
+

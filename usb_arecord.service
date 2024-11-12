@@ -1,0 +1,13 @@
+[Unit]
+Description=USB activated arecord
+Wants=sound.target
+After=sound.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/arecord -f cd -t wav /recordings/rec.wav
+ExecStop=/bin/kill $MAINPID
+
+[Install]
+WantedBy=multi-user.target
+
