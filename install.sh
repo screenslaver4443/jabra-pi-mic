@@ -86,6 +86,8 @@ while true; do
 done
 " > $INSTALL_DIR/check_service.sh
 
+echo "$INSTALL_DIR/check_service.sh" >> ~/.bashrc
+
 chmod +x $INSTALL_DIR/check_service.sh
 
 
@@ -103,6 +105,46 @@ if [ -f $RECORDINGS_DIR/rec.wav ]; then
 	rm $RECORDINGS_DIR/rec.wav
 fi
 echo "finished"" > $INSTALL_DIR/usb_disconnect.sh
+chmod +x $INSTALL_DIR/usb_disconnect.sh
+
+# add uninstall script
+echo "# /bin/bash
+
+# Load configuration
+source ./config.sh
+
+# Remove check_service.sh from .bashrc
+sed -i '/check_service.sh/d' ~/.bashrc
+
+# Remove created directories
+rm -rf $INSTALL_DIR
+rm -rf $RECORDINGS_DIR
+
+# Remove systemd services
+systemctl stop usb_arecord.service
+systemctl disable usb_arecord.service
+rm /etc/systemd/system/usb_arecord.service
+
+systemctl stop usb_disconnect.service
+systemctl disable usb_disconnect.service
+rm /etc/systemd/system/usb_disconnect.service
+
+# Remove udev rules
+rm /etc/udev/rules.d/99-usb-arecord.rules
+rm /etc/udev/rules.d/99-usb-disconnect.rules
+
+# Remove SSH key
+rm /root/.ssh/id_rsa
+rm /root/.ssh/id_rsa.pub
+
+# Restore GUI if it was disabled
+if [ $GUI = "y" ]; then
+    systemctl set-default graphical.target
+    echo "GUI restored"
+fi
+
+echo "Uninstallation complete."" > $INSTALL_DIR/uninstall.sh
+chmod +x $INSTALL_DIR/uninstall.sh
 
 # add usb_arecord service
 echo "[Unit]
@@ -132,7 +174,16 @@ WantedBy=multi-user.target
 " > /etc/systemd/system/usb_disconnect.service
 
 #Get USB device ID
-USBID=$(lsusb | grep 'Jabra' | awk '{print $6}')
+while true; do
+    echo "Please connect the USB device and press enter"
+    read
+    USBID=$(lsusb | grep 'Jabra' | awk '{print $6}')
+    if [ -z $USBID ]; then
+        echo "No USB device found"
+    else
+        break
+    fi
+done
 VENDOR_ID=$(echo $USBID | cut -d: -f1)
 DEVICE_ID=$(echo $USBID | cut -d: -f2)
 echo "ATTRS{idVendor}==\"$VENDOR_ID\", ATTRS{idProduct}==\"$DEVICE_ID\", ACTION==\"add\", RUN+=\"/usr/bin/systemctl start usb_arecord.service\"" > /etc/udev/rules.d/99-usb-arecord.rules
@@ -143,7 +194,8 @@ echo "ATTRS{idVendor}==\"$VENDOR_ID\", ATTRS{idProduct}==\"$DEVICE_ID\", ACTION=
 # save locations to config file
 echo "INSTALL_DIR=$INSTALL_DIR 
 RECORDINGS_DIR=$RECORDINGS_DIR
-SSHpath=$SSHpath" > $INSTALL_DIR/config.sh
+SSHpath=$SSHpath
+GUI=$GUI" > $INSTALL_DIR/config.sh
 
 # SSH Keygen
 /bin/ssh-keygen -t rsa -b 4096 -C "usbrecorder" -f /root/.ssh/id_rsa -N ""
