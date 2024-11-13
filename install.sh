@@ -1,7 +1,4 @@
 # /bin/bash
-
-apt install arecord -y # Install arecord
-
 # Ask for the install directory
 echo "Install Directory [/recscripts]:"
 read INSTALL_DIR
@@ -28,7 +25,7 @@ if [ -z $GUI ]; then
     GUI="n"
 fi
 
-if [ $GUI == "y" ]; then
+if [ $GUI = "y" ]; then
     systemctl set-default multi-user.target
     echo "GUI disabled"
 else
@@ -47,7 +44,7 @@ else
     echo "SSH target is $SSH_TARGET"
     echo "is this correct? [y/n]"
     read yn
-    if [ $yn == "y" ]; then
+    if [ $yn = "y" ]; then
         break
     fi
 fi
@@ -63,7 +60,7 @@ else
     echo "SSH target directory is $SSH_TARGET_DIR"
     echo "is this correct? [y/n]"
     read yn
-    if [ $yn == "y" ]; then
+    if [ $yn = "y" ]; then
         break
     fi
 fi
@@ -154,7 +151,7 @@ SSHpath=$SSHpath" > $INSTALL_DIR/config.sh
 
 
 # Install 3.5LCD display driver
-if [ $LCD == "y" ]; then
+if [ $LCD = "y" ]; then
     sudo rm -rf LCD-show
     git clone https://github.com/goodtft/LCD-show.git
     chmod -R 755 LCD-show
