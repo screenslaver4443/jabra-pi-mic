@@ -95,7 +95,7 @@ chmod +x $INSTALL_DIR/check_service.sh
 # Adds USB Disconnect Script
 echo "#!/bin/bash
 # usb_disconnect.sh
-source ./config.sh
+. ./config.sh
 
 exec > /tmp/usb_disconnect.log 2>&1
 echo "started @ $(date) "
@@ -111,7 +111,7 @@ chmod +x $INSTALL_DIR/usb_disconnect.sh
 echo "# /bin/bash
 
 # Load configuration
-source ./config.sh
+. ./config.sh
 
 # Remove check_service.sh from .bashrc
 sed -i '/check_service.sh/d' ~/.bashrc
