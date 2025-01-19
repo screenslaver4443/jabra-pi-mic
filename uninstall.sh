@@ -1,7 +1,7 @@
 # /bin/bash
 
 # Load configuration
-source ./config.sh
+. ./config.sh
 
 # Remove check_service.sh from .bashrc
 sed -i '/check_service.sh/d' ~/.bashrc
