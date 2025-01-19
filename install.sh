@@ -74,7 +74,8 @@ mkdir -p $RECORDINGS_DIR
 mkdir -p $INSTALL_DIR
 
 # Adds Check Script
-echo "#!/bin/bash
+cat > $INSTALL_DIR/check_service.sh <<'EOF' 
+#!/bin/bash
 while true; do
 	clear	
 	if systemctl --quiet is-active usb_arecord; then
@@ -84,7 +85,7 @@ while true; do
 	fi
 	sleep 0.5
 done
-" > $INSTALL_DIR/check_service.sh
+EOF
 
 echo "$INSTALL_DIR/check_service.sh" >> ~/.bashrc
 
@@ -93,7 +94,8 @@ chmod +x $INSTALL_DIR/check_service.sh
 
 
 # Adds USB Disconnect Script
-echo "#!/bin/bash
+cat > $INSTALL_DIR/usb_disconnect.sh <<'EOF' 
+#!/bin/bash
 # usb_disconnect.sh
 . ./config.sh
 
@@ -104,11 +106,13 @@ if [ -f $RECORDINGS_DIR/rec.wav ]; then
 	/bin/scp $RECORDINGS_DIR $SSHpath/rec.wav
 	rm $RECORDINGS_DIR/rec.wav
 fi
-echo "finished"" > $INSTALL_DIR/usb_disconnect.sh
+echo "finished"
+EOF
 chmod +x $INSTALL_DIR/usb_disconnect.sh
 
 # add uninstall script
-echo "# /bin/bash
+cat > $INSTALL_DIR/uninstall.sh <<'EOF' 
+# /bin/bash
 
 # Load configuration
 . ./config.sh
@@ -143,7 +147,8 @@ if [ $GUI = "y" ]; then
     echo "GUI restored"
 fi
 
-echo "Uninstallation complete."" > $INSTALL_DIR/uninstall.sh
+echo "Uninstallation complete."
+EOF
 chmod +x $INSTALL_DIR/uninstall.sh
 
 # add usb_arecord service
@@ -195,6 +200,7 @@ echo "ATTRS{idVendor}==\"$VENDOR_ID\", ATTRS{idProduct}==\"$DEVICE_ID\", ACTION=
 echo "INSTALL_DIR=$INSTALL_DIR 
 RECORDINGS_DIR=$RECORDINGS_DIR
 SSHpath=$SSHpath
+SSHtarget=$SSH_TARGET
 GUI=$GUI" > $INSTALL_DIR/config.sh
 
 # SSH Keygen
