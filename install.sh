@@ -74,81 +74,18 @@ mkdir -p $RECORDINGS_DIR
 mkdir -p $INSTALL_DIR
 
 # Adds Check Script
-cat > $INSTALL_DIR/check_service.sh <<'EOF' 
-#!/bin/bash
-while true; do
-	clear	
-	if systemctl --quiet is-active usb_arecord; then
-		echo "Recording"
-	else
-		echo "Not Recording"
-	fi
-	sleep 0.5
-done
-EOF
-
-echo "$INSTALL_DIR/check_service.sh" >> ~/.bashrc
-
+curl https://raw.githubusercontent.com/screenslaver4443/jabra-pi-mic/refs/heads/master/check_service.sh -o $INSTALL_DIR/check_service.sh
+echo "$INSTALL_DIR/check_service.sh" >> ~/.bashrc #Add to end of bashrc
 chmod +x $INSTALL_DIR/check_service.sh
 
 
 
 # Adds USB Disconnect Script
-cat > $INSTALL_DIR/usb_disconnect.sh <<'EOF' 
-#!/bin/bash
-# usb_disconnect.sh
-. ./config.sh
-
-exec > /tmp/usb_disconnect.log 2>&1
-echo "started @ $(date) "
-/bin/systemctl stop usb_arecord.service
-if [ -f $RECORDINGS_DIR/rec.wav ]; then
-	/bin/scp $RECORDINGS_DIR $SSHpath/rec.wav
-	rm $RECORDINGS_DIR/rec.wav
-fi
-echo "finished"
-EOF
+curl https://raw.githubusercontent.com/screenslaver4443/jabra-pi-mic/refs/heads/master/usb_disconnect.sh -o $INSTALL_DIR/usb_disconnect.sh
 chmod +x $INSTALL_DIR/usb_disconnect.sh
 
 # add uninstall script
-cat > $INSTALL_DIR/uninstall.sh <<'EOF' 
-# /bin/bash
-
-# Load configuration
-. ./config.sh
-
-# Remove check_service.sh from .bashrc
-sed -i '/check_service.sh/d' ~/.bashrc
-
-# Remove created directories
-rm -rf $INSTALL_DIR
-rm -rf $RECORDINGS_DIR
-
-# Remove systemd services
-systemctl stop usb_arecord.service
-systemctl disable usb_arecord.service
-rm /etc/systemd/system/usb_arecord.service
-
-systemctl stop usb_disconnect.service
-systemctl disable usb_disconnect.service
-rm /etc/systemd/system/usb_disconnect.service
-
-# Remove udev rules
-rm /etc/udev/rules.d/99-usb-arecord.rules
-rm /etc/udev/rules.d/99-usb-disconnect.rules
-
-# Remove SSH key
-rm /root/.ssh/id_rsa
-rm /root/.ssh/id_rsa.pub
-
-# Restore GUI if it was disabled
-if [ $GUI = "y" ]; then
-    systemctl set-default graphical.target
-    echo "GUI restored"
-fi
-
-echo "Uninstallation complete."
-EOF
+curl https://raw.githubusercontent.com/screenslaver4443/jabra-pi-mic/refs/heads/master/uninstall.sh -o $INSTALL_DIR/usb_disconnect.sh
 chmod +x $INSTALL_DIR/uninstall.sh
 
 # add usb_arecord service
@@ -165,7 +102,7 @@ ExecStop=/bin/kill $MAINPID
 [Install]
 WantedBy=multi-user.target
 " > /etc/systemd/system/usb_arecord.service
-
+# Add usb_disconnect service
 echo "[Unit]
 Description=USB Disconnect Handler
 
