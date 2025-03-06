@@ -30,6 +30,10 @@ curl -s -L https://raw.githubusercontent.com/screenslaver4443/jabra-pi-mic/refs/
 
 2. Follow prompts while installing.
 
+### Manual Install
+
+Instructions coming soon.
+
 ## Usage
 
 - Connect the USB microphone to the Raspberry Pi. The recording will start automatically.
