@@ -19,6 +19,7 @@ This repository contains scripts and configuration files to set up a Raspberry P
 - SSH access to the remote server for SCP file transfer.
 - Git
 - Curl
+- Arecord
 
 ## Installation
 
