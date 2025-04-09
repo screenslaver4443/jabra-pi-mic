@@ -129,7 +129,7 @@ done
 VENDOR_ID=$(echo $USBID | cut -d: -f1)
 DEVICE_ID=$(echo $USBID | cut -d: -f2)
 echo "ATTRS{idVendor}==\"$VENDOR_ID\", ATTRS{idProduct}==\"$DEVICE_ID\", ACTION==\"add\", RUN+=\"/usr/bin/systemctl start usb_arecord.service\"" > /etc/udev/rules.d/99-usb-arecord.rules
-echo "ATTRS{idVendor}==\"$VENDOR_ID\", ATTRS{idProduct}==\"$DEVICE_ID\", ACTION==\"remove\", RUN+=\"$INSTALL_DIR/usb_disconnect.sh\"" > /etc/udev/rules.d/99-usb-disconnect.rules
+echo "ATTRS{idVendor}==\"$VENDOR_ID\", ATTRS{idProduct}==\"$DEVICE_ID\", ACTION==\"remove\", RUN+=\"/usr/bin/systemctl start usb_disconnect.service\"" > /etc/udev/rules.d/99-usb-disconnect.rules
 
 
 
