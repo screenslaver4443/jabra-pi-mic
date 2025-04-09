@@ -96,7 +96,7 @@ After=sound.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/arecord -f cd -t wav /recordings/rec.wav
+ExecStart=/usr/bin/arecord -f cd -c 1 -D hw:3,0 -t wav $RECORDINGS_DIR/rec.wav
 ExecStop=/bin/kill $MAINPID
 
 [Install]
