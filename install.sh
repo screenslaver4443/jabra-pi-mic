@@ -85,7 +85,7 @@ curl https://raw.githubusercontent.com/screenslaver4443/jabra-pi-mic/refs/heads/
 chmod +x $INSTALL_DIR/usb_disconnect.sh
 
 # add uninstall script
-curl https://raw.githubusercontent.com/screenslaver4443/jabra-pi-mic/refs/heads/master/uninstall.sh -o $INSTALL_DIR/usb_disconnect.sh
+curl https://raw.githubusercontent.com/screenslaver4443/jabra-pi-mic/refs/heads/master/uninstall.sh -o $INSTALL_DIR/uninstall.sh
 chmod +x $INSTALL_DIR/uninstall.sh
 
 # add usb_arecord service
@@ -118,7 +118,7 @@ WantedBy=multi-user.target
 #Get USB device ID
 while true; do
     echo "Please connect the USB device and press enter"
-    read
+    read " "
     USBID=$(lsusb | grep 'Jabra' | awk '{print $6}')
     if [ -z $USBID ]; then
         echo "No USB device found"
