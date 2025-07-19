@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Check for root (sudo) privileges
+if [ "$EUID" -ne 0 ]; then
+    echo "This script must be run as root. Please use sudo."
+    exit 1
+fi
+
 REPO_URL="https://github.com/screenslaver4443/jabra-pi-mic"
 TMP_DIR=$(mktemp -d)
 
@@ -28,3 +34,13 @@ done
 
 rm -rf "$TMP_DIR"
 echo "Update complete."
+
+echo "Updating system packages..."
+apt update && apt upgrade -y
+
+if [ $? -eq 0 ]; then
+    echo "System packages updated successfully. The system will now reboot."
+    reboot
+else
+    echo "Package update failed. Please check for errors. System will not reboot."
+fi
