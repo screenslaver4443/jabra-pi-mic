@@ -78,7 +78,9 @@ curl https://raw.githubusercontent.com/screenslaver4443/jabra-pi-mic/refs/heads/
 echo "$INSTALL_DIR/check_service.sh" >> ~/.bashrc #Add to end of bashrc
 chmod +x $INSTALL_DIR/check_service.sh
 
-
+# Adds update script
+curl https://raw.githubusercontent.com/screenslaver4443/jabra-pi-mic/refs/heads/master/update.sh -o $INSTALL_DIR/update.sh
+chmod +x $INSTALL_DIR/update.sh
 
 # Adds USB Disconnect Script
 curl https://raw.githubusercontent.com/screenslaver4443/jabra-pi-mic/refs/heads/master/usb_disconnect.sh -o $INSTALL_DIR/usb_disconnect.sh
