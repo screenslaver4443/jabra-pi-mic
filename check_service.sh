@@ -2,18 +2,30 @@
 setfont /usr/share/consolefonts/Lat15-TerminusBold32x16.psf.gz
 
 trap 'setfont /usr/share/consolefonts/Lat15-TerminusBold14.psf.gz; exit' INT
+. ./config.sh
 while true; do
 	clear	
 	if systemctl --quiet is-active usb_arecord; then
-		echo -ne "\033]11;#ff0000\007" # Set background to red
-		echo Recording
+		echo -e "\033[31mRecording\033[0m" # Red text
 	else
-		echo -ne "\033]11;#000000\007" # Reset background to black
-		echo Not Recording
+		echo -e "\033[37mNot Recording\033[0m" # White text
 	fi
 	echo Wifi: $(iwgetid -r)
-	echo IP: $(hostname -I | awk '{print $1}')
+	echo RPi IP: $(hostname -I | awk '{print $1}')
+	echo Destination: $SSHpath
 	
+	if [ -f /tmp/last_upload_status ]; then
+    	status=$(cat /tmp/last_upload_status)
+    	if [ "$status" = "success" ]; then
+        	echo -e "\033[32mLast upload: Success\033[0m"
+		else
+			echo -e "\033[31mLast upload: Failed\033[0m"
+		fi
+		else
+			echo "Last upload: N/A"
+	fi	
+	echo "Press Ctrl+C to exit"
+
 	sleep 0.5
 done
 
