@@ -138,7 +138,7 @@ echo "INSTALL_DIR=$INSTALL_DIR
 RECORDINGS_DIR=$RECORDINGS_DIR
 SSHpath=$SSHpath
 SSHtarget=$SSH_TARGET
-GUI=$GUI" > $INSTALL_DIR/config.sh
+NoGUI=$GUI" > $INSTALL_DIR/config.sh
 
 # SSH Keygen
 /bin/ssh-keygen -t rsa -b 4096 -C "usbrecorder" -f /root/.ssh/id_rsa -N ""

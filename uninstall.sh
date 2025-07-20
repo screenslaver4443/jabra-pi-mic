@@ -28,7 +28,7 @@ rm /root/.ssh/id_rsa
 rm /root/.ssh/id_rsa.pub
 
 # Restore GUI if it was disabled
-if [ $GUI = "y" ]; then
+if [ $NoGUI = "y" ]; then
     systemctl set-default graphical.target
     echo "GUI restored"
 fi

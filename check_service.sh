@@ -1,8 +1,8 @@
 #!/bin/bash
+. ./config.sh
 setfont /usr/share/consolefonts/Lat15-TerminusBold32x16.psf.gz
 
 trap 'setfont /usr/share/consolefonts/Lat15-TerminusBold14.psf.gz; exit' INT
-. ./config.sh
 while true; do
 	clear	
 	if systemctl --quiet is-active usb_arecord; then

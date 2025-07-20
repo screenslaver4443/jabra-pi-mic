@@ -21,7 +21,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # List of files to update (add or remove as needed)
-FILES_TO_UPDATE=("uninstall.sh" "check_service.sh" "update.sh")
+FILES_TO_UPDATE=("uninstall.sh" "check_service.sh" "update.sh" "usb_disconnect.sh")
 
 for file in "${FILES_TO_UPDATE[@]}"; do
     if [ -f "$TMP_DIR/$file" ]; then
