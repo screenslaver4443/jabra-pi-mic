@@ -9,15 +9,23 @@ fi
 REPO_URL="https://github.com/screenslaver4443/jabra-pi-mic"
 TMP_DIR=$(mktemp -d)
 
-echo "Downloading latest scripts from $REPO_URL..."
-
-# Clone the repo to a temporary directory
+# Self-update logic: fetch the latest update.sh and re-exec if changed
+LATEST_UPDATE_SH="$TMP_DIR/update.sh"
+echo "Checking for update to update.sh..."
 git clone --depth 1 "$REPO_URL" "$TMP_DIR"
-
 if [ $? -ne 0 ]; then
     echo "Failed to clone repository."
     rm -rf "$TMP_DIR"
     exit 1
+fi
+if ! cmp -s "$LATEST_UPDATE_SH" "$0"; then
+    echo "A new version of update.sh is available. Updating and restarting..."
+    cp "$LATEST_UPDATE_SH" "$0"
+    rm -rf "$TMP_DIR"
+    exec bash "$0" "$@"
+    exit 0
+else
+    echo "update.sh is up to date."
 fi
 
 # List of files to update (add or remove as needed)
