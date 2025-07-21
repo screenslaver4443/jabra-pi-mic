@@ -16,13 +16,21 @@ while true; do
 	
 	if [ -f /tmp/last_upload_status ]; then
     	status=$(cat /tmp/last_upload_status)
-    	if [ "$status" = "success" ]; then
-        	echo -e "\033[32mLast upload: Success\033[0m"
-		else
+    	if [[ "$status" =~ ^success ]]; then
+    	    # Check if status has a date/time after 'success'
+    	    if [[ "$status" =~ ^success[[:space:]]+(.+) ]]; then
+    	        datetime=$(echo "$status" | cut -d' ' -f2-)
+    	        echo -e "\033[32mLast upload: Success at $datetime\033[0m"
+    	    else
+    	        echo -e "\033[32mLast upload: Success\033[0m"
+    	    fi
+		elif [ "$status" = "failed" ]; then
 			echo -e "\033[31mLast upload: Failed\033[0m"
-		fi
 		else
 			echo "Last upload: N/A"
+		fi
+	else
+		echo "Last upload: N/A"
 	fi	
 	echo "Press Ctrl+C to exit"
 
