@@ -9,9 +9,11 @@ if [ -f $RECORDINGS_DIR/rec.wav ]; then
     /bin/scp $RECORDINGS_DIR/rec.wav $SSHpath/rec.wav
     if [ $? -eq 0 ]; then
         echo "success $(date '+%Y-%m-%d %H:%M:%S')" > /tmp/last_upload_status
+        echo "succesful upload"
         rm $RECORDINGS_DIR/rec.wav
     else
         echo "fail $(date '+%Y-%m-%d %H:%M:%S')" > /tmp/last_upload_status
+        echo "failed upload"
     fi
 fi
 echo "finished"
