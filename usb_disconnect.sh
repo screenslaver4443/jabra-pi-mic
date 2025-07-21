@@ -1,6 +1,6 @@
 #!/bin/bash
 # usb_disconnect.sh
-. ./config.sh
+. /recscripts/config.sh
 
 exec > /tmp/usb_disconnect.log 2>&1
 echo "started @ $(date) "
